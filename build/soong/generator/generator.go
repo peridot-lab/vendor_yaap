@@ -144,9 +144,8 @@ func (g *Module) GenerateAndroidBuildActions(ctx android.ModuleContext) {
 	tools := map[string]android.Path{}
 
 	if len(g.properties.Tools) > 0 {
-		ctx.VisitDirectDepsProxy(func(proxy android.ModuleProxy) {
-			preferred := android.PrebuiltGetPreferred(ctx, proxy)
-			switch ctx.OtherModuleDependencyTag(preferred) {
+		ctx.VisitDirectDepsBlueprint(func(module blueprint.Module) {
+			switch ctx.OtherModuleDependencyTag(module) {
 			case hostToolDepTag:
 				tool := ctx.OtherModuleName(proxy)
 				var path android.OptionalPath
@@ -168,8 +167,8 @@ func (g *Module) GenerateAndroidBuildActions(ctx android.ModuleContext) {
 					ctx.ModuleErrorf("host tool %q missing output file", tool)
 				}
 			default:
-				if !android.IsSourceDepTagWithOutputTag(ctx.OtherModuleDependencyTag(preferred), "") {
-					ctx.ModuleErrorf("unknown dependency on %q", ctx.OtherModuleName(preferred))
+				if !android.IsSourceDepTagWithOutputTag(ctx.OtherModuleDependencyTag(module), "") {
+					ctx.ModuleErrorf("unknown dependency on %q", ctx.OtherModuleName(module))
 				}
 			}
 		})
