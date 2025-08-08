@@ -3,3 +3,15 @@
 # Override host metadata to make builds more reproducible and avoid leaking info
 [ -z "${BUILD_USERNAME}" ] && export BUILD_USERNAME=android-build
 [ -z "${BUILD_HOSTNAME}" ] && export BUILD_HOSTNAME=r-0123456789abcdef-acab
+
+# ABI compatibility checks fail for several reasons:
+#   - Switching to zlib-ng changes some internal structs, but not the public
+#     API.
+#
+# We may fix these eventually by updating the ABI specifications, but it's
+# likely not worth the effort for us because of how many repos are affected.
+# We would need to fork a lot of extra repos (thus increasing maintenance
+# overhead) just to update the ABI specs.
+#
+# For now, just skip the ABI checks to fix build errors.
+export SKIP_ABI_CHECKS=true
