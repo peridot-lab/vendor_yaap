@@ -19,9 +19,9 @@
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Strings for PixelPropUtils -->
-    <string name="cert_device">caiman</string>
-    <string name="cert_fp">google/caiman_beta/caiman:16/BP31.250610.004/13769805:user/release-keys</string>
-    <string name="cert_model">Pixel 9 Pro</string>
+    <string name="cert_device">husky</string>
+    <string name="cert_fp">google/husky_beta/husky:16/BP31.250610.009/13905196:user/release-keys</string>
+    <string name="cert_model">Pixel 8 Pro</string>
     <string name="cert_manufacturer">Google</string>
     <string name="cert_spl">2025-07-05</string>
     <string name="cert_sdk">32</string>
