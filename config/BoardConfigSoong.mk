@@ -1,6 +1,5 @@
-ifneq (,$(wildcard $(OUT_DIR)/.path_interposer_origpath))
-ORIG_PATH := $(shell cat $(OUT_DIR)/.path_interposer_origpath)
-endif
+PATH_OVERRIDE_SOONG := $(shell echo $(TOOLS_PATH_OVERRIDE) | sed -e 's|$$|$$$$|g')
+
 # Add variables that we wish to make available to soong here.
 EXPORT_TO_SOONG := \
     ORIG_PATH \
@@ -12,7 +11,6 @@ EXPORT_TO_SOONG := \
     PATH_OVERRIDE_SOONG \
     TARGET_KERNEL_CONFIG \
     TARGET_KERNEL_SOURCE \
-    TARGET_KERNEL_CLANG_PATH \
     TARGET_PREBUILT_KERNEL_HEADERS
 
 # Setup SOONG_CONFIG_* vars to export the vars listed above.
