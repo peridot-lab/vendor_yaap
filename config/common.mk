@@ -187,12 +187,18 @@ PRODUCT_VENDOR_PROPERTIES += \
     ro.egl.blobcache.multifile=true \
     ro.egl.blobcache.multifile_limit=33554432
 
+# Gapps and Microg
 ifeq ($(TARGET_BUILD_GAPPS),true)
     $(call inherit-product-if-exists, vendor/google/gms/config.mk)
 else
     $(call inherit-product, vendor/microg/microg.mk)
 endif
 $(call inherit-product-if-exists, vendor/google/pixel/config.mk)
+
+# Lindroid
+ifeq ($(TARGET_BUILD_LINDROID),true)
+    $(call inherit-product, vendor/lindroid/lindroid.mk)
+endif
 
 #OTA tools
 PRODUCT_HOST_PACKAGES += \
