@@ -19,10 +19,10 @@
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Strings for PixelPropUtils -->
-    <string name="cert_device">tokay</string>
-    <string name="cert_fp">google/tokay_beta/tokay:Baklava/BP41.250725.006/13939570:user/release-keys</string>
-    <string name="cert_model">Pixel 9</string>
+    <string name="cert_device">tegu</string>
+    <string name="cert_fp">google/tegu_beta/tegu:16/BP41.250822.010/14082742:user/release-keys</string>
+    <string name="cert_model">Pixel 9a</string>
     <string name="cert_manufacturer">Google</string>
-    <string name="cert_spl">2025-08-05</string>
+    <string name="cert_spl">2025-09-05</string>
     <string name="cert_sdk">32</string>
 </resources>
