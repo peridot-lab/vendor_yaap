@@ -144,26 +144,17 @@ func (g *Module) GenerateAndroidBuildActions(ctx android.ModuleContext) {
 	tools := map[string]android.Path{}
 
 	if len(g.properties.Tools) > 0 {
-		ctx.VisitDirectDepsProxyAllowDisabled(func(proxy android.ModuleProxy) {
-			module := android.PrebuiltGetPreferred(ctx, proxy)
-			switch ctx.OtherModuleDependencyTag(module) {
+		ctx.VisitDirectDepsProxy(func(proxy android.ModuleProxy) {
+			preferred := android.PrebuiltGetPreferred(ctx, proxy)
+			switch ctx.OtherModuleDependencyTag(preferred) {
 			case hostToolDepTag:
-				tool := ctx.OtherModuleName(module)
+				tool := ctx.OtherModuleName(proxy)
 				var path android.OptionalPath
-
-				if t, ok := module.(HostToolProvider); ok {
-					if !t.(android.Module).Enabled(ctx) {
-						if ctx.Config().AllowMissingDependencies() {
-							ctx.AddMissingDependencies([]string{tool})
-						} else {
-							ctx.ModuleErrorf("depends on disabled module %q", tool)
-						}
-						break
-					}
-					path = t.HostToolPath()
+				if info, ok := android.OtherModuleProvider(ctx, preferred, android.HostToolProviderInfoProvider); ok {
+					path = info.HostToolPath
 				} else {
 					ctx.ModuleErrorf("%q is not a host tool provider", tool)
-					break
+					return
 				}
 
 				if path.Valid() {
@@ -177,8 +168,8 @@ func (g *Module) GenerateAndroidBuildActions(ctx android.ModuleContext) {
 					ctx.ModuleErrorf("host tool %q missing output file", tool)
 				}
 			default:
-				if !android.IsSourceDepTagWithOutputTag(ctx.OtherModuleDependencyTag(module), "") {
-					ctx.ModuleErrorf("unknown dependency on %q", ctx.OtherModuleName(module))
+				if !android.IsSourceDepTagWithOutputTag(ctx.OtherModuleDependencyTag(preferred), "") {
+					ctx.ModuleErrorf("unknown dependency on %q", ctx.OtherModuleName(preferred))
 				}
 			}
 		})
@@ -188,7 +179,7 @@ func (g *Module) GenerateAndroidBuildActions(ctx android.ModuleContext) {
 		return
 	}
 
-	toolFiles := ctx.ExpandSources(g.properties.Tool_files, nil)
+	toolFiles := android.PathsForModuleSrcExcludes(ctx, g.properties.Tool_files, nil)
 	for _, tool := range toolFiles {
 		g.implicitDeps = append(g.implicitDeps, tool)
 		if _, exists := tools[tool.Rel()]; !exists {
