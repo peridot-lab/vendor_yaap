@@ -199,6 +199,10 @@ ifeq ($(TARGET_BUILD_LINDROID),true)
     $(call inherit-product, vendor/lindroid/lindroid.mk)
 endif
 
+# SetupWizard theme
+PRODUCT_PRODUCT_PROPERTIES += \
+    setupwizard.theme=glif_expressive
+
 #OTA tools
 PRODUCT_HOST_PACKAGES += \
     signapk \
