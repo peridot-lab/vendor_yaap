@@ -61,4 +61,6 @@
          by the resources of the app using the Shell library. -->
     <bool name="config_enableShellMainThread">true</bool>
 
+    <!-- Whether or not to show the UMO on the glanceable hub when media is playing. -->
+    <bool name="config_showUmoOnHub">true</bool>
 </resources>
