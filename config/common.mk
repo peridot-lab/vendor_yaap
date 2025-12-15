@@ -1,4 +1,4 @@
-PRODUCT_PRODUCT_DEFAULT_PROPERTIES += \
+PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
     dalvik.vm.debug.alloc=0 \
     keyguard.no_require_sim=true \
     media.recorder.show_manufacturer_and_model=true \
@@ -22,7 +22,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     net.hostname=$(TARGET_VENDOR_DEVICE_NAME)
 
 ifneq ($(TARGET_BUILD_VARIANT),user)
-PRODUCT_PRODUCT_PROPERTIES += \
+PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
     ro.ota.allow_downgrade=true
 endif
 
@@ -32,14 +32,14 @@ PRODUCT_PACKAGES += \
 
 # Copy all YAAP-specific init rc files
 $(foreach f,$(wildcard vendor/yaap/prebuilt/common/etc/init/*.rc),\
-    $(eval PRODUCT_COPY_FILES += $(f):$(TARGET_COPY_OUT_PRODUCT)/etc/init/$(notdir $f)))
+    $(eval PRODUCT_COPY_FILES += $(f):$(TARGET_COPY_OUT_SYSTEM)/etc/init/$(notdir $f)))
 
 # Credential storage
 PRODUCT_PACKAGES += \
     android.software.credentials.prebuilt.xml
 
 # Don't compile SystemUITests
-EXCLUDE_PRODUCTUI_TESTS := true
+EXCLUDE_SYSTEMUI_TESTS := true
 
 # Flags
 ifeq ($(TARGET_BUILD_VARIANT), user)
@@ -50,7 +50,7 @@ ifeq ($(TARGET_BUILD_VARIANT), user)
     # Disable dexpreopt debug info
     WITH_DEXPREOPT_DEBUG_INFO := false
     # Reduce system server verbosity
-    PRODUCT_PRODUCT_SERVER_DEBUG_INFO := false
+    PRODUCT_SYSTEM_SERVER_DEBUG_INFO := false
     # Don't include art debug targets
     PRODUCT_ART_TARGET_INCLUDE_DEBUG_BUILD := false
     # Always preopt extracted APKs to prevent extracting out of the APK for gms
@@ -75,8 +75,8 @@ PRODUCT_DEX_PREOPT_BOOT_IMAGE_PROFILE_LOCATION := frameworks/base/boot/boot-imag
 
 # Permissions
 PRODUCT_COPY_FILES += \
-    vendor/yaap/prebuilt/common/etc/permissions/yaap-privapp-permissions.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/permissions/yaap-privapp-permissions.xml \
-    vendor/yaap/prebuilt/common/etc/permissions/yaap-power-whitelist.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/sysconfig/yaap-power-whitelist.xml
+    vendor/yaap/prebuilt/common/etc/permissions/yaap-privapp-permissions.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/permissions/yaap-privapp-permissions.xml \
+    vendor/yaap/prebuilt/common/etc/permissions/yaap-power-whitelist.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/sysconfig/yaap-power-whitelist.xml
 
 # Cloned app exemption
 PRODUCT_COPY_FILES += \
@@ -89,7 +89,7 @@ PRODUCT_PACKAGES += \
 
 # Enable Android Beam on all targets
 PRODUCT_COPY_FILES += \
-    vendor/yaap/prebuilt/common/etc/permissions/android.software.nfc.beam.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/permissions/android.software.nfc.beam.xml
+    vendor/yaap/prebuilt/common/etc/permissions/android.software.nfc.beam.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/permissions/android.software.nfc.beam.xml
 
 # Enable whole-program R8 Java optimizations for SystemUI and system_server,
 # but also allow explicit overriding for testing and development.
@@ -125,7 +125,7 @@ PRODUCT_ENFORCE_RRO_EXCLUDED_OVERLAYS += vendor/yaap/overlay-vanilla/packages
 endif
 PRODUCT_COPY_FILES += \
     vendor/yaap/overlay/partition_order.xml:$(TARGET_COPY_OUT_PRODUCT)/overlay/partition_order.xml \
-    vendor/yaap/overlay/config-system_ext.xml:$(TARGET_COPY_OUT_PRODUCT_EXT)/overlay/config/config.xml
+    vendor/yaap/overlay/config-system_ext.xml:$(TARGET_COPY_OUT_SYSTEM_EXT)/overlay/config/config.xml
 
 # Disable vendor restrictions
 PRODUCT_RESTRICT_VENDOR_FILES := false
@@ -153,7 +153,7 @@ PRODUCT_DEXPREOPT_SPEED_APPS += \
     Launcher3QuickStep \
     Settings
 
-PRODUCT_PRODUCT_PROPERTIES += \
+PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
     dalvik.vm.systemuicompilerfilter=speed
 
 ifeq ($(TARGET_SUPPORTS_64_BIT_APPS), true)
@@ -163,7 +163,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 endif
 
 # Disable async MTE on a few processes
-PRODUCT_PRODUCT_EXT_PROPERTIES += \
+PRODUCT_SYSTEM_EXT_PROPERTIES += \
     persist.arm64.memtag.app.com.android.se=off \
     persist.arm64.memtag.app.com.google.android.bluetooth=off \
     persist.arm64.memtag.app.com.android.nfc=off \
@@ -171,7 +171,7 @@ PRODUCT_PRODUCT_EXT_PROPERTIES += \
 
 # Blur
 ifeq ($(TARGET_ENABLE_BLUR), true)
-PRODUCT_PRODUCT_DEFAULT_PROPERTIES += \
+PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
     ro.surface_flinger.supports_background_blur=1
 else
 PRODUCT_PRODUCT_PROPERTIES += \
