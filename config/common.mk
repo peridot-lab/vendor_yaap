@@ -13,10 +13,6 @@ PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
     ro.url.legal.android_privacy=http://www.google.com/intl/%s/mobile/android/basic/privacy.html \
     ro.boot.vendor.overlay.theme=com.android.internal.systemui.navbar.gestural
 
-# Disable default frame rate limit for games
-PRODUCT_PRODUCT_PROPERTIES += \
-    debug.graphics.game_default_frame_rate.disabled=true
-
 #Set Network Hostname
 PRODUCT_PROPERTY_OVERRIDES += \
     net.hostname=$(TARGET_VENDOR_DEVICE_NAME)
