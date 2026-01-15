@@ -20,9 +20,9 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Strings for PixelPropUtils -->
     <string name="cert_device">komodo</string>
-    <string name="cert_fp">google/komodo_beta/komodo:16/CP11.251114.007/14621658:user/release-keys</string>
+    <string name="cert_fp">google/komodo_beta/komodo:16/CP11.251209.007.A1/14691868:user/release-keys</string>
     <string name="cert_model">Pixel 9 Pro XL</string>
     <string name="cert_manufacturer">Google</string>
-    <string name="cert_spl">2025-12-05</string>
+    <string name="cert_spl">2026-01-05</string>
     <string name="cert_sdk">32</string>
 </resources>
