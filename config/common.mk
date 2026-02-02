@@ -112,7 +112,8 @@ PRODUCT_PACKAGES += \
     PermissionControllerOverlay \
     SettingsOverlay \
     SettingsProviderOverlay \
-    SystemUIOverlay
+    SystemUIOverlay \
+    BlackThemeOverlay
 ifneq ($(TARGET_BUILD_GAPPS),true)
 PRODUCT_PACKAGES += \
     DialerOverlayVanilla \
