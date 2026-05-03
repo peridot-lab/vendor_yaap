@@ -39,9 +39,7 @@ PRODUCT_PACKAGES += \
     Camelot \
     Canvas \
     ExactCalculator \
-    Glimpse \
     MatLog \
-    Twelve \
     YASR \
     Seedvault \
     OmniJaws \
@@ -92,6 +90,18 @@ PRODUCT_PACKAGES += \
     TrichromeChromeDualArch \
     TrichromeLibraryDualArch \
     TrichromeWebViewDualArch
+endif
+
+# Twelve
+ifeq ($(TARGET_BUILD_TWELVE),true)
+PRODUCT_PACKAGES += \
+    Twelve
+endif
+
+# Glimpse
+ifeq ($(TARGET_BUILD_GLIMPSE),true)
+PRODUCT_PACKAGES += \
+    Glimpse
 endif
 
 # Include explicitly to work around GMS issues
