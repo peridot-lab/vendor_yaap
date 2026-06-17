@@ -144,19 +144,20 @@ func (g *Module) GenerateAndroidBuildActions(ctx android.ModuleContext) {
 	tools := map[string]android.Path{}
 
 	if len(g.properties.Tools) > 0 {
-		ctx.VisitDirectDepsBlueprint(func(module blueprint.Module) {
+		ctx.VisitDirectDepsProxyAllowDisabled(func(module android.ModuleProxy) {
 			switch ctx.OtherModuleDependencyTag(module) {
 			case hostToolDepTag:
-				tool := ctx.OtherModuleName(proxy)
-				var path android.OptionalPath
-				if info, ok := android.OtherModuleProvider(ctx, preferred, android.HostToolProviderInfoProvider); ok {
-					path = info.HostToolPath
-				} else {
-					ctx.ModuleErrorf("%q is not a host tool provider", tool)
-					return
-				}
-
-				if path.Valid() {
+				tool := ctx.OtherModuleName(module)
+				if h := android.GetHostToolInfo(ctx, module); h != nil {
+					path := h.HostToolPath
+					if !path.Valid() {
+						if ctx.Config().AllowMissingDependencies() {
+							ctx.AddMissingDependencies([]string{tool})
+						} else {
+							ctx.ModuleErrorf("host tool %q missing output file", tool)
+						}
+						break
+					}
 					g.implicitDeps = append(g.implicitDeps, path.Path())
 					if _, exists := tools[tool]; !exists {
 						tools[tool] = path.Path()
@@ -164,7 +165,12 @@ func (g *Module) GenerateAndroidBuildActions(ctx android.ModuleContext) {
 						ctx.ModuleErrorf("multiple tools for %q, %q and %q", tool, tools[tool], path.Path().String())
 					}
 				} else {
-					ctx.ModuleErrorf("host tool %q missing output file", tool)
+					if ctx.Config().AllowMissingDependencies() {
+						ctx.AddMissingDependencies([]string{tool})
+					} else {
+						ctx.ModuleErrorf("%q is not a host tool provider", tool)
+						break
+					}
 				}
 			default:
 				if !android.IsSourceDepTagWithOutputTag(ctx.OtherModuleDependencyTag(module), "") {
@@ -251,7 +257,7 @@ func (g *Module) GenerateAndroidBuildActions(ctx android.ModuleContext) {
 	manifestPath := android.PathForModuleOut(ctx, "generator.sbox.textproto")
 
 	// Use a RuleBuilder to create a rule that runs the command inside an sbox sandbox.
-	rule := android.NewRuleBuilder(pctx, ctx).Sbox(genDir, manifestPath).SandboxTools()
+	rule := android.NewRuleBuilder(pctx, ctx).Sbox(genDir, manifestPath)
 
 	rule.Command().
 		Text(rawCommand).
