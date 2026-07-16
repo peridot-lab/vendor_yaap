@@ -70,6 +70,11 @@
 #
 #   TARGET_MERGE_DTBS_WILDCARD         = Optional, limits the .dtb files used to generate the
 #                                          final DTB image when using QCOM's merge_dtbs script.
+#
+#   TARGET_KERNEL_MODULES_IGNORE       = Optional, list of kernel module names (without .ko)
+#                                          to ignore during depmod and installation. Modules in
+#                                          this list will be built but not installed to any
+#                                          partition, and will be excluded from depmod processing.
 
 ifneq ($(TARGET_NO_KERNEL),true)
 ifneq ($(TARGET_NO_KERNEL_OVERRIDE),true)
@@ -531,6 +536,19 @@ $(TARGET_PREBUILT_INT_KERNEL): $(KERNEL_CONFIG) $(DEPMOD) $(DTC) $(KERNEL_MODULE
 				$(eval p := $(subst :,$(space),$(s))) \
 				; mv $$(echo $$all_modules | tr ' ' '\n' | grep /$(word 1,$(p))) $$kernel_modules_dir/$(word 2,$(p))); \
 			all_modules=$$(find $$kernel_modules_dir -type f -name '*.ko'); \
+			$(if $(TARGET_KERNEL_MODULES_IGNORE),\
+				all_modules=$$(for n in $$all_modules; do \
+					module_name=$$(basename $$n .ko); \
+					skip=0; \
+					for ignore in $(TARGET_KERNEL_MODULES_IGNORE); do \
+						if [ "$$module_name" = "$$ignore" ]; then \
+							skip=1; \
+							break; \
+						fi; \
+					done; \
+					if [ $$skip -eq 0 ]; then echo $$n; fi; \
+				done); \
+			) \
 			dup_modules=$$(echo $$all_modules | tr ' ' '\n' | xargs -n1 basename | sort | uniq -d); \
 			$(if $$dup_modules,\
 				err=$$(for m in $$dup_modules; do \
