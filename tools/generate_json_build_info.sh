@@ -66,11 +66,10 @@ fi
 echo -e "${GREEN}Generating ${YELLOW}${device_code}.json${NC}"
 
 isPayload=0
-[ -f payload_properties.txt ] && rm payload_properties.txt
-if unzip "$file_path" payload_properties.txt; then
+if payload_properties=$(unzip -p "$file_path" payload_properties.txt); then
     isPayload=1
     offset=$(findPayloadOffset "$file_path")
-    keyPairs=$(cat payload_properties.txt | sed "s/=/\": \"/" | sed 's/^/          \"/' | sed 's/$/\"\,/')
+    keyPairs=$(printf '%s\n' "$payload_properties" | sed "s/=/\": \"/" | sed 's/^/          \"/' | sed 's/$/\"\,/')
     keyPairs=${keyPairs%?}
 fi
 # get date from props
