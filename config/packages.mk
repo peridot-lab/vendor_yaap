@@ -39,6 +39,7 @@ PRODUCT_PACKAGES += \
     Camelot \
     Canvas \
     MatLog \
+    GameSpace \
     YASR \
     Seedvault \
     OmniJaws \
