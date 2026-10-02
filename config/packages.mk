@@ -38,6 +38,7 @@ PRODUCT_PACKAGES += \
     AvatarPicker \
     Camelot \
     MatLog \
+    GameSpace \
     YASR \
     Seedvault \
     OmniJaws \
