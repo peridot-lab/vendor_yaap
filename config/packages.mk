@@ -38,7 +38,6 @@ PRODUCT_PACKAGES += \
     AvatarPicker \
     Camelot \
     Canvas \
-    ExactCalculator \
     MatLog \
     YASR \
     Seedvault \
